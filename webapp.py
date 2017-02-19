@@ -15,30 +15,11 @@ log.info('Logging configured')
 UPLOADS = 'upload/'
 
 
-def add_task(s, first, second):
-    log.info('diffing {} and {}'.format(first.hash, second.hash))
-    if s.query(Task).filter(
-            (Task.first == first.id and Task.second == second.id) or 
-            (Task.first == second.id and Task.second == first.id)).first():
-        log.info('diff of {} and {} was already generated, returning'.format(first.hash, second.hash))
-        return
-
-    log.info('new diff of {} and {} adding task'.format(first.hash, second.hash))
-    task = Task(first=first.id, second=second.id)
+def add_tasks(s, binary):
+    log.info('new adding task for binary {}'.format(binary.hash))
+    task = Task(binary=binary.id)
     s.add(task)
     s.commit()
-
-
-def generate_diffs(s, binary):
-    # TODO: should approximate binary age, insert in timeline, and diff with previous/next
-    # TODO: or should it?
-
-    previous_binary = s.query(Binary).filter(Binary.id < binary.id).order_by(Binary.id.desc()).first()
-    if previous_binary is None:
-        log.info('no previous binary for diffing with {}'.format(binary.hash))
-        return
-
-    add_task(s, previous_binary, binary)
 
 
 def upload_binary(data):
@@ -54,7 +35,7 @@ def upload_binary(data):
         s.add(binary)
         s.commit()
 
-        generate_diffs(s, binary)
+        add_tasks(s, binary)
     else:
         log.info('binary {} was already uploaded'.format(hash))
         pass
