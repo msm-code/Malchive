@@ -1,0 +1,5 @@
+upload/
+samples/
+*.pyc
+*.swp
+database.db

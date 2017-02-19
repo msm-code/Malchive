@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Templating in Flask</title>
+    </head>
+    <body>
+        <h1>Hello {{ user }} my old friend!</h1>
+
+        <form method="post" enctype="multipart/form-data" action="">
+            <input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+
+        {% for binary in binaries %}
+        <p>{{binary}}</p>
+        {% endfor %}
+
+        {% for diff in diffs %}
+        <p>{{diff}}</p>
+        <pre>{{diff.content}}</pre>
+        {% endfor %}
+
+        {% for task in tasks %}
+        <p>{{task}}</p>
+        {% endfor %}
+    </body>
+</html>
