@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,11 +12,13 @@ class Binary(Base):
 
     id = Column(Integer, primary_key=True)
     hash = Column(String, nullable=False)
+    name = Column(String, nullable=False)
     upload_date = Column(DateTime, nullable=False, default=datetime.datetime.now)
     parent = Column(Integer)
+    processed = Column(Boolean, nullable=False, default=False)
 
     def __repr__(self):
-        return 'Binary({}, {}, {})'.format(self.id, self.hash, self.parent)
+        return 'Binary({}, {}, {})'.format(self.id, self.parent, self.name)
 
 
 class Diff(Base):
