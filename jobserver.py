@@ -14,6 +14,8 @@ UPLOADS = 'upload/'
 
 
 def measure_similarity(first, second):
+    # TODO add caching in database
+
     first_path = UPLOADS + first.hash
     second_path = UPLOADS + second.hash
 
@@ -50,6 +52,7 @@ def locate_peers(s, binary):
             bin_to_other = measure_similarity(binary, other)
 
             # triangle inequality with delta
+            # TODO use closest match, or one of edge cases instead
             DELTA = 1.1
             if bin_to_parent + bin_to_other < parent_diff * DELTA:
                 return (parent, other)
@@ -69,6 +72,7 @@ def locate_peers(s, binary):
     return best_match
 
 def bare_diff_files(first_path, second_path):
+    # TODO use real binary diffing method (something in diaphora probably)
     try:
         return subprocess.check_output(['sdiff', '-s', first_path, second_path])
     except subprocess.CalledProcessError as e:
@@ -76,6 +80,7 @@ def bare_diff_files(first_path, second_path):
 
 
 def diff_files(first_path, second_path):
+    # TODO use diaphora
     try:
         return subprocess.check_output(['diff', first_path, second_path])
     except subprocess.CalledProcessError as e:
@@ -83,6 +88,7 @@ def diff_files(first_path, second_path):
 
 
 def diff_peers(s, first, second):
+    # TODO use diaphora
     log.info('Diffing binaries {} and {}'.format(first, second))
 
     prev_path = UPLOADS + first.hash
